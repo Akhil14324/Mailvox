@@ -22,11 +22,14 @@ export default function GoogleAuthButton() {
         alert(err.message || 'Sign in failed');
       }
     },
-    onError: () => {
+    onError: (err) => {
+      console.error('Google error:', err);
       alert('Google sign-in failed');
     },
     scope: [EMAIL_SCOPE, PROFILE_SCOPE, GMAIL_SCOPE].join(' '),
     flow: 'implicit',
+    ux_mode: 'popup',
+    redirect_uri: window.location.origin,
   });
 
   return (
