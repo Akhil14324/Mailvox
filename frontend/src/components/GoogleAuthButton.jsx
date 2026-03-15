@@ -28,8 +28,8 @@ export default function GoogleAuthButton() {
     },
     scope: [EMAIL_SCOPE, PROFILE_SCOPE, GMAIL_SCOPE].join(' '),
     flow: 'implicit',
-    ux_mode: 'popup',
-    redirect_uri: window.location.origin,
+    ux_mode: 'redirect',
+    redirect_uri: 'https://mailvox-seven.vercel.app',
   });
 
   return (
