@@ -16,7 +16,7 @@ await connectDB();
 
 const app = express();
 
-aapp.use(cors({ 
+app.use(cors({ 
   origin: ['https://mailvox-seven.vercel.app', 'http://localhost:3000'],
   credentials: true 
 }));
