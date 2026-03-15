@@ -1,0 +1,24 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  overflow: auto;
+}
+
+.loading {
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .main {
+    padding-bottom: 80px;
+  }
+}

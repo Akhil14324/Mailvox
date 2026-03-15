@@ -1,0 +1,88 @@
+:root {
+  --bg: #F3E3D0;
+  --surface: #fff;
+  --border: #C9BBA8;
+  --text: #1a2030;
+  --text-muted: #5a6578;
+  --primary: #6B8BAE;
+  --primary-hover: #5a7a9d;
+  --secondary: #A8C4D4;
+  --accent: #6B8BAE;
+  --error: #c53030;
+  --font-heading: 'Cabinet Grotesk', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #1a2030;
+  --surface: #212838;
+  --border: #2e3a4e;
+  --text: #e8ecf4;
+  --text-muted: #9ca3b8;
+  --primary: #6B8BAE;
+  --primary-hover: #7d9dc4;
+  --secondary: #A8C4D4;
+  --accent: #6B8BAE;
+  --error: #fc8181;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-google:hover {
+  background: var(--bg);
+}
+.btn-google svg {
+  flex-shrink: 0;
+}

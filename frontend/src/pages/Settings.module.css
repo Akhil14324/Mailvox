@@ -1,0 +1,8 @@
+.page {
+  padding: 1.5rem;
+}
+
+.muted {
+  color: var(--text-muted);
+  max-width: 480px;
+}
