@@ -13,8 +13,17 @@ import templatesRoutes from './routes/templates.js';
 import historyRoutes from './routes/history.js';
 
 await connectDB();
+
 const app = express();
+
 app.use(cors({ origin: true, credentials: true }));
+
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
 
 app.use('/api/auth', authRoutes);
