@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -20,8 +20,9 @@ api.interceptors.response.use(
 );
 
 export const auth = {
-  googleCallback: (access_token, refresh_token) =>
-    api.post('/auth/google/callback', { access_token, refresh_token }),
+  // Synchronized to send the ID Token as 'credential'
+  googleCallback: (credential) =>
+    api.post('/auth/google/callback', { credential }),
   me: () => api.get('/auth/me'),
 };
 
