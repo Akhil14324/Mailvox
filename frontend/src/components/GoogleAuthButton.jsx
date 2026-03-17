@@ -2,10 +2,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../hooks/useAuth';
 import { auth as api } from '../services/api';
 
-const GMAIL_SCOPE = 'https://www.googleapis.com/auth/gmail.send';
-const EMAIL_SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
-const PROFILE_SCOPE = 'https://www.googleapis.com/auth/userinfo.profile';
-
 export default function GoogleAuthButton() {
   const { login } = useAuth();
 
@@ -24,12 +20,8 @@ export default function GoogleAuthButton() {
     },
     onError: (err) => {
       console.error('Google error:', err);
-      alert('Google sign-in failed');
     },
-    scope: [EMAIL_SCOPE, PROFILE_SCOPE, GMAIL_SCOPE].join(' '),
-    flow: 'implicit',
-    ux_mode: 'redirect',
-    redirect_uri: 'https://mailvox-seven.vercel.app',
+    scope: 'email profile',
   });
 
   return (
