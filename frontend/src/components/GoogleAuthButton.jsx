@@ -5,35 +5,40 @@ import { auth as api } from '../services/api';
 export default function GoogleAuthButton() {
   const { login } = useAuth();
   const buttonRef = useRef(null);
-  const [scriptLoaded, setScriptLoaded] = useState(!!window.google);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
+  // Check for the Google script every 500ms until found
   useEffect(() => {
-    if (window.google) {
-      setScriptLoaded(true);
-      return;
-    }
-    const script = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
-    if (script) {
-      script.addEventListener('load', () => setScriptLoaded(true));
-    }
+    const checkScript = setInterval(() => {
+      if (window.google?.accounts?.id) {
+        setScriptLoaded(true);
+        clearInterval(checkScript);
+      }
+    }, 500);
+    return () => clearInterval(checkScript);
   }, []);
 
   useEffect(() => {
     if (!scriptLoaded || !buttonRef.current) return;
 
-    window.google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim(),
-      callback: async (response) => {
-        try {
-          // We pass only response.credential to the service
-          const { data } = await api.googleCallback(response.credential);
-          login(data.token, data.user);
-        } catch (err) {
-          console.error('Login Error:', err);
-          alert(err.message || 'Sign in failed');
-        }
-      },
-    });
+    // Use a global flag to prevent "Multiple calls" warning
+    if (!window.google_initialized) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim(),
+        callback: async (response) => {
+          try {
+            const { data } = await api.googleCallback(response.credential);
+            login(data.token, data.user);
+          } catch (err) {
+            console.error('Sign-in Error:', err);
+            alert(err.message || 'Sign in failed');
+          }
+        },
+        // Force the UX mode to be handled carefully by Google
+        ux_mode: 'popup'
+      });
+      window.google_initialized = true;
+    }
 
     window.google.accounts.id.renderButton(buttonRef.current, {
       theme: 'outline',
@@ -44,7 +49,11 @@ export default function GoogleAuthButton() {
   }, [scriptLoaded]);
 
   if (!scriptLoaded) {
-    return <button className="btn-google" disabled>Loading...</button>;
+    return (
+      <button className="btn-google" disabled>
+        Loading Google Auth...
+      </button>
+    );
   }
 
   return <div ref={buttonRef} />;
