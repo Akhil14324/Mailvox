@@ -17,6 +17,11 @@ export default function GoogleAuthButton() {
       script.addEventListener('load', () => setScriptLoaded(true));
     }
   }, []);
+  useEffect(() => {
+  console.log('Client ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
+  if (!scriptLoaded || !buttonRef.current) return;
+  // ... rest of code
+}, [scriptLoaded]);
 
   useEffect(() => {
     if (!scriptLoaded || !buttonRef.current) return;
