@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import api from '../services/api'; // Import your configured axios instance
 
 const AuthContext = createContext(null);
 
@@ -24,12 +25,12 @@ export function AuthProvider({ children }) {
       setLoading(false);
       return;
     }
-    fetch('/api/auth/me', {
-      headers: { Authorization: `Bearer ${token}` },
-      credentials: 'include',
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data) => setUser(data.user))
+
+    // Use the axios 'api' instance instead of 'fetch'
+    api.get('/auth/me')
+      .then((response) => {
+        setUser(response.data.user);
+      })
       .catch(() => {
         logout();
       })
