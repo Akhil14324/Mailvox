@@ -64,5 +64,18 @@ router.get('/me', authMiddleware, (req, res) => {
   if (!u) return res.status(404).json({ error: 'User not found' });
   res.json({ user: { id: u._id, email: u.email, name: u.name, picture: u.picture } });
 });
+router.post('/connect-gmail', authMiddleware, async (req, res) => {
+  try {
+    const { access_token } = req.body;
+    if (!access_token) return res.status(400).json({ error: "Missing token" });
 
+    const user = await User.findById(req.userId);
+    user.accessToken = access_token; // This is the secret sauce for sending
+    await user.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 export default router; 

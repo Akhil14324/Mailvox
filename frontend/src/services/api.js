@@ -25,24 +25,29 @@ api.interceptors.response.use(
 export const auth = {
   googleCallback: (credential) =>
     api.post('/auth/google/callback', { credential }),
+  // ADDED: This is required for the Connect Gmail button to work
+  connectGmail: (access_token) => 
+    api.post('/auth/connect-gmail', { access_token }),
   me: () => api.get('/auth/me'),
 };
 
-// ... keep all other exports (generate, send, etc.) the same ...
 export const generate = { email: (data) => api.post('/generate', data) };
 export const send = { email: (data) => api.post('/send', data) };
 export const bulk = { send: (data) => api.post('/bulk/send', data) };
+
 export const schedule = {
   list: () => api.get('/schedule'),
   create: (data) => api.post('/schedule', data),
   cancel: (id) => api.delete(`/schedule/${id}`),
 };
+
 export const templates = {
   list: () => api.get('/templates'),
   create: (data) => api.post('/templates', data),
   update: (id, data) => api.put(`/templates/${id}`, data),
   delete: (id) => api.delete(`/templates/${id}`),
 };
+
 export const history = { list: () => api.get('/history') };
 
 export default api;
