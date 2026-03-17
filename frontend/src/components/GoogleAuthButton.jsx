@@ -27,7 +27,7 @@ export default function GoogleAuthButton() {
     if (!scriptLoaded || !buttonRef.current) return;
 
     window.google.accounts.id.initialize({
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim(),
       callback: async (response) => {
         try {
           const { data } = await api.googleCallback(response.credential, undefined);
