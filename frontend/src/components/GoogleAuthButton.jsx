@@ -7,7 +7,6 @@ export default function GoogleAuthButton() {
   const buttonRef = useRef(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  // Check for the Google script every 500ms until found
   useEffect(() => {
     const checkScript = setInterval(() => {
       if (window.google?.accounts?.id) {
@@ -21,21 +20,20 @@ export default function GoogleAuthButton() {
   useEffect(() => {
     if (!scriptLoaded || !buttonRef.current) return;
 
-    // Use a global flag to prevent "Multiple calls" warning
     if (!window.google_initialized) {
       window.google.accounts.id.initialize({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim(),
+        auto_select: false, // STOP automatic login of previous account
         callback: async (response) => {
+          console.log("Encoded JWT ID token: " + response.credential);
           try {
             const { data } = await api.googleCallback(response.credential);
             login(data.token, data.user);
           } catch (err) {
-            console.error('Sign-in Error:', err);
-            alert(err.message || 'Sign in failed');
+            console.error('Backend Auth Error:', err);
+            alert('Login failed: ' + (err.message || 'Unknown error'));
           }
         },
-        // Force the UX mode to be handled carefully by Google
-        ux_mode: 'popup'
       });
       window.google_initialized = true;
     }
@@ -43,18 +41,16 @@ export default function GoogleAuthButton() {
     window.google.accounts.id.renderButton(buttonRef.current, {
       theme: 'outline',
       size: 'large',
-      text: 'signin_with',
       shape: 'rectangular',
     });
+    
+    // This prompts the "One Tap" UI if you want it, 
+    // but we can comment it out to stay strictly with the button
+    // window.google.accounts.id.prompt(); 
+    
   }, [scriptLoaded]);
 
-  if (!scriptLoaded) {
-    return (
-      <button className="btn-google" disabled>
-        Loading Google Auth...
-      </button>
-    );
-  }
+  if (!scriptLoaded) return <button className="btn-google">Loading...</button>;
 
-  return <div ref={buttonRef} />;
+  return <div ref={buttonRef} style={{ minHeight: '40px' }} />;
 }

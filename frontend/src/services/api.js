@@ -1,7 +1,9 @@
 import axios from 'axios';
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : '/api',
+  // This ensures it uses Render in production and localhost in dev
+  baseURL: backendUrl ? `${backendUrl}/api` : '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
